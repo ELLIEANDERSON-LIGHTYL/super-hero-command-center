@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>My 2-9PM Checklist — Super Hero Command Center</title>
+<style>
+  *{margin:0;padding:0;box-sizing:border-box}
+  body{background:#0f0e1e;color:#fff;font-family:Arial,sans-serif;padding:24px 18px 60px}
+  .wrap{max-width:700px;margin:0 auto}
+  a{color:#e9a8e8}
+  .eyebrow{letter-spacing:.3em;font-size:11px;color:#e9a8e8;font-weight:800}
+  h1{font-family:Georgia,serif;font-size:44px;line-height:1;margin:12px 0 8px}
+  h1 i{color:#e9a8e8}
+  .sub{color:#ddd;line-height:1.5;margin-bottom:20px}
+  .bar{background:#ffffff22;border-radius:999px;height:14px;overflow:hidden;margin:12px 0 6px}
+  #fill{background:#e9a8e8;height:100%;width:0%}
+  #count{font-size:13px;letter-spacing:.1em;color:#e9a8e8;margin-bottom:22px}
+  .card{background:linear-gradient(180deg,#2a2745,#1a1830);border:1px solid #e9a8e855;border-radius:20px;padding:20px;margin-bottom:16px}
+  .card h2{font-family:Georgia,serif;font-size:22px;margin-bottom:12px}
+  .card h2 span{color:#e9a8e8;font-size:13px;font-family:Arial,sans-serif;letter-spacing:.15em}
+  label{display:flex;gap:12px;align-items:flex-start;background:#ffffff12;border:1px solid #ffffff22;border-radius:14px;padding:13px;margin-bottom:10px;cursor:pointer}
+  label.done{opacity:.6;text-decoration:line-through}
+  input{width:22px;height:22px;accent-color:#e9a8e8;margin-top:2px}
+  .btns{display:flex;gap:10px;flex-wrap:wrap;margin-top:20px}
+  button{border-radius:999px;padding:13px 20px;font-weight:800;letter-spacing:.1em;font-size:12px;cursor:pointer;border:1px solid #e9a8e8}
+  .pink{background:#e9a8e8;color:#1a0f1e;border:none}
+  .ghost{background:transparent;color:#fff}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <a href="index.html">← Back to Command Center</a>
+  <div class="eyebrow" style="margin-top:16px">TECH · PRINT · DESIGN · STRATEGY</div>
+  <h1>My 2-9PM <i>Checklist</i></h1>
+  <p class="sub">Tick it as you go, Ellie. It saves by itself — even if you close it.</p>
+  <div class="bar"><div id="fill"></div></div>
+  <div id="count">0 of 0 done</div>
+  <div class="card">
+    <h2>2:00 PM — START CLEAN <span>POSTER 1</span></h2>
+    <label><input type="checkbox" data-id="c1"> Open desk, water, charger</label>
+    <label><input type="checkbox" data-id="c2"> Look at today's list</label>
+    <label><input type="checkbox" data-id="c3"> Pick 1 big win for today</label>
+  </div>
+  <div class="card">
+    <h2>4:00 PM — BUILD + PRINT <span>POSTER 2</span></h2>
+    <label><input type="checkbox" data-id="c4"> Make QR code / flyer / design</label>
+    <label><input type="checkbox" data-id="c5"> Check it looks pretty + prints clean</label>
+    <label><input type="checkbox" data-id="c6"> Save it + send it</label>
+  </div>
+  <div class="card">
+    <h2>6:30 PM — POST + CONNECT <span>POSTER 3</span></h2>
+    <label><input type="checkbox" data-id="c7"> Post it</label>
+    <label><input type="checkbox" data-id="c8"> Reply to 1 person</label>
+    <label><input type="checkbox" data-id="c9"> Tag it right</label>
+  </div>
+  <div class="card">
+    <h2>9:00 PM — CLOSE LIKE A HERO <span>POSTER 4</span></h2>
+    <label><input type="checkbox" data-id="c10"> Save everything</label>
+    <label><input type="checkbox" data-id="c11"> Shut down + tidy desk</label>
+    <label><input type="checkbox" data-id="c12"> Leave tomorrow a gift</label>
+  </div>
+  <div class="btns">
+    <button class="pink" onclick="document.querySelectorAll('input').forEach(b=>b.checked=true);save()">✨ CHECK ALL DONE</button>
+    <button class="ghost" onclick="localStorage.removeItem('hero-checklist');document.querySelectorAll('input').forEach(b=>b.checked=false);save()">RESET FOR TOMORROW</button>
+  </div>
+  <p class="sub" style="margin-top:16px">Your checks live only on your MacBook. No one else sees them.</p>
+</div>
+<script>
+  function save(){
+    let data={};
+    document.querySelectorAll('input').forEach(b=>{data[b.dataset.id]=b.checked; b.closest('label').classList.toggle('done',b.checked)});
+    localStorage.setItem('hero-checklist', JSON.stringify(data));
+    let all=document.querySelectorAll('input').length;
+    let done=document.querySelectorAll('input:checked').length;
+    document.getElementById('fill').style.width=(done/all*100)+'%';
+    document.getElementById('count').textContent=done+' of '+all+' done — You got this, Ellie!';
+  }
+  let saved=JSON.parse(localStorage.getItem('hero-checklist')||'{}');
+  document.querySelectorAll('input').forEach(b=>{ if(saved[b.dataset.id]) b.checked=true; });
+  document.querySelectorAll('input').forEach(b=>b.addEventListener('change',save));
+  save();
+</script>
+</body>
+</html>
